@@ -1,0 +1,162 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+
+<-- jsp --> 
+
+<%@ page session="false" %> 
+<%@ page import="java.sql.*" %>
+<%@ page import com.ibm.db2.jcc.DB2Driver %>
+
+<% try { 
+	//com.ibm.db2.jcc.DB2Driver driver = new DB2Driver();
+	Class.forName("com.ibm.db2.jcc.DB2Driver"); 
+	System.out.println("db2 driver loaded"); 
+	} catch (ClassNotFoundException e) 
+		{ 
+			System.out.println(e.toString()); 
+		}
+
+
+%>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de"> 
+
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /> 
+
+
+<link rel="stylesheet" type="text/css" href="styles.css" />
+
+
+<title> Hauptseite </title> 
+
+</head>  <!--head --> 
+
+<body> 
+
+
+<div id="container"> 
+
+<div id="head"> 
+<h1>ProjectFunder</h1>
+</div> <!-- head --> 
+
+
+
+<div id="navigation"> 
+<a title="my_project" href="view_profile.htm"> Mein Profil </a>
+</div> <!-- Ende navi --> 
+
+
+
+<div id="content"> 
+
+<div id ="open_projects"> 
+<!-- as long as projects exist, select title, username and funding limit and display. 
+otherwise show empty - no projects -->
+
+<h2>Offene Projekte</h2>
+
+<% 
+
+		// :-/  I do not know whether url is right
+	
+	String url ="jdbc:db2:// " 
+				+ "atlas.is.inf.uni-due.de:50" 
+				+ "076" 
+				+ "/database:currentSchema=076";
+		
+	String user = "dbp076";
+	String password = "reing7do";   // our tutor will kill us for that :-/  
+	
+	String sql = "projekt.titel, projekt.ersteller, projekt.finanzierungslimit"+	
+					"from projekt";
+
+	try {
+		Connection con = DriverManager.getConnection(url, user, password);
+		
+		PreparedStatement ps = con.preparedStatement();  
+		
+		ResultSet rs = ps.executeQuery(sql);
+		
+		while (rs.next()) {
+			String titel = rs.getString(1);
+			String ersteller = rs.getString(2);
+			String status = rs.getString(3);
+			
+			out.println("<a title= project  href = titel.htm>" + titel + "</a>");
+			out.println("<br>");
+			out.println("von:  " + ersteller +  "  <br>");
+			out.println("Aktuell: " + status ); 
+				
+		}
+		rs.close();
+		ps.close();
+		con.close();
+	} catch (SQLExeption e){ e.printStackTrace()}
+	  catch (Exeption e) {};
+%>
+		
+		
+</div> <!-- open_projects-->
+		
+
+<div id ="closed_projects"> 
+<h2> Abgeschlossene Projekte</h2> 
+
+<% 
+	String url ="jdbc:db2:// " 
+				+ "atlas.is.inf.uni-due.de:50" 
+				+ "076" 
+				+ "/database:currentSchema=076";
+		
+	String user = "dbp076";
+	
+	String password = "reing7do"; 
+	
+	String sql = "projekt.titel, projekt.ersteller, projekt.status, benutzer.beschreibung"
+		+ "projekt.finanzierungslimit  from projekt";
+	try {
+		Connection con = DriverManager.getConnection(url, user, password);
+		PreparedStatement ps = con.preparedStatement();  
+		ResultSet rs = ps.executeQuery(sql);
+		
+		if( rs.getString(3).equals("geschlossen")) {
+				while (rs.next()) {
+				out.println(rs.getString(1) + "<br>");
+				out.println("<a title= benutzer_profil  href = " +  
+					rs.getString(4) + ".htm>" + Benutzerprofil + "</a>");
+				out.println("Aktuell: " + rs.getdouble(5) ); 		
+			
+		rs.close();
+		ps.close();
+		con.close();
+	} catch (SQLExeption e){ e.printStackTrace()}
+	  catch (Exeption e) {};
+%>
+
+
+
+
+
+</div> <!-- closed_projects-->		
+		
+		
+</div> <!-- content --> 
+
+
+
+<div id="foot"> 
+<a title="new_project" href="new_project.htm"> Projekt erstellen </a>
+</div> <!-- foot --> 
+
+
+</div> <!-- container -->
+
+
+
+</body> 
+
+</html>
+

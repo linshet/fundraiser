@@ -1,0 +1,45 @@
+
+
+body { 
+	font-family: Verdana, Arial, Helvetica, sans-serif; font-size: small; 
+} 
+
+h2 { 
+	font-size: 130%;
+	color:#00487d;
+	padding: 1em;
+	
+} 
+
+h3 { 
+	font-size: 110%; 
+	margin: 0 00 1em 0; 
+	color: #00487d;
+	
+}
+
+h1 {
+	color: #001c6d;
+	
+}
+ 
+a {
+	font-size: 95%;
+	color: #60c9ff;
+}
+
+
+#head {
+	padding: 0.25em;
+}
+
+#navigation{
+	padding: 2.5em;
+}
+#content {
+	padding: 1.5em;
+}
+
+#foot{
+	padding: 2.5em;
+}
